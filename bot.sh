@@ -28,16 +28,19 @@ fi
 mkfifo in
 tail -f - > in &
 
-(sleep 15 && printf ":j %s\n" "$CHANNEL" > in) &
+while true; do
+  (sleep 15 && printf ":j %s\n" "$CHANNEL" > in) &
 
-<in sic -h "$SERVER" -p "$PORT" -n "$NICK" -k "$PASS" |
-sed -u 's/:/ /' |
-while read -r chan date time nick msg; do
-  if [ "$msg" == ".voiceme" ]; then
-    echo "$chan: $date $time $nick $msg"
-    nick="${nick#<}"
-    nick="${nick%>}"
-    printf ":MODE $CHANNEL +v $nick\n"
-    printf ":MODE $CHANNEL +v $nick\n" >in
-  fi
+  <in sic -h "$SERVER" -p "$PORT" -n "$NICK" -k "$PASS" |
+  sed -u 's/:/ /' |
+  while read -r chan date time nick msg; do
+    if [ "$msg" == ".voiceme" ]; then
+      echo "$chan: $date $time $nick $msg"
+      nick="${nick#<}"
+      nick="${nick%>}"
+      printf ":MODE $CHANNEL +v $nick\n"
+      printf ":MODE $CHANNEL +v $nick\n" >in
+    fi
+  done
+  sleep 10
 done
