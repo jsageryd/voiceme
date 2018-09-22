@@ -30,6 +30,7 @@ tail -f - > in &
 
 while true; do
   (sleep 15 && printf ":j %s\n" "$CHANNEL" > in) &
+  (sleep 15 && printf ":MODE %s -R\n" "$NICK" > in) &
 
   <in sic -h "$SERVER" -p "$PORT" -n "$NICK" -k "$PASS" |
   sed -u 's/:/ /' |
