@@ -41,6 +41,12 @@ while true; do
       nick="${nick%>}"
       printf ":MODE $CHANNEL +v $nick\n"
       printf ":MODE $CHANNEL +v $nick\n" >in
+    elif [ "$msg" == ".unvoiceme" ]; then
+      echo "$chan: $date $time $nick $msg"
+      nick="${nick#<}"
+      nick="${nick%>}"
+      printf ":MODE $CHANNEL -v $nick\n"
+      printf ":MODE $CHANNEL -v $nick\n" >in
     fi
   done
   sleep 10
