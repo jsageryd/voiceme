@@ -29,8 +29,8 @@ mkfifo in
 tail -f - > in &
 
 while true; do
-  (sleep 30 && printf ":j %s\n" "$CHANNEL" > in) &
-  (sleep 60 && printf ":MODE %s -R\n" "$NICK" > in) &
+  (sleep 60 && printf ":j %s\n" "$CHANNEL" > in) &
+  (sleep 30 && printf ":MODE %s -R\n" "$NICK" > in) &
 
   <in sic -h "$SERVER" -p "$PORT" -n "$NICK" -k "$PASS" |
   sed -u 's/:/ /' |
